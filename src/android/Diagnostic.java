@@ -361,6 +361,8 @@ public class Diagnostic extends CordovaPlugin{
                 callbackContext.success(isRemoteNotificationsEnabled() ? 1 : 0);
             } else if(action.equals("isADBModeEnabled")) {
                 callbackContext.success(isADBModeEnabled() ? 1 : 0);
+            } else if(action.equals("isDevelopmentSettingsEnabled")) {
+                callbackContext.success(isDevelopmentSettingsEnabled() ? 1 : 0);
             } else if(action.equals("isDeviceRooted")) {
                 callbackContext.success(isDeviceRooted() ? 1 : 0);
             } else {
@@ -692,6 +694,35 @@ public class Diagnostic extends CordovaPlugin{
         boolean result = false;
         try {
             result = getADBMode() == 1;
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+        Log.d(TAG, "ADB mode enabled: " + result);
+        return result;
+    }
+
+    /**
+     * get device ADB mode info
+     */
+    public int getDevelopmentSettingsEnabled(){
+        int mode;
+        Context context = this.cordova.getActivity().getApplicationContext();
+        if (Build.VERSION.SDK_INT >= 17){ // Jelly_Bean_MR1 and above
+            mode = Settings.Global.getInt(context.getContentResolver(), Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0);
+        } else { // Pre-Jelly_Bean_MR1
+            mode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.DEVELOPMENT_SETTINGS_ENABLED, 0);
+        }
+        return mode;
+    }
+
+    /**
+     * checks if ADB mode is on
+     * especially for debug mode check
+     */
+    public boolean isDevelopmentSettingsEnabled(){
+        boolean result = false;
+        try {
+            result = getDevelopmentSettingsEnabled() == 1;
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }

@@ -745,6 +745,17 @@ interface Diagnostic {
 
     /**
      * ANDROID ONLY
+     * Checks if DEVELOPMENT_SETTINGS_ENABLED is enabled.
+     * @param successCallback
+     * @param errorCallback
+     */
+    isDevelopmentSettingsEnabled?: (
+        successCallback: (enabled: boolean) => void,
+        errorCallback: (error: string) => void
+    ) => void;
+
+    /**
+     * ANDROID ONLY
      * Checks if device is rooted.
      * @param successCallback
      * @param errorCallback
